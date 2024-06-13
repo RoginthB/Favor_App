@@ -60,9 +60,6 @@ const CreateUser = () => {
     password:userData.password,
     dataOfBirth:userData.dateOfBirth,
     gender:userData.gender,
-    followers:0,
-    following:0,
-    post:0,
     userId:userData.name+userData.dateOfBirth[8]+userData.dateOfBirth[9]
   };
     

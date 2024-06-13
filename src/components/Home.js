@@ -23,7 +23,7 @@ function Home() {
     },[]);
 
   const getData=()=>{
-    axios.get(process.env.REACT_APP_API_URL+'/images/').then(res=>{
+    axios.get(process.env.REACT_APP_API_URL+'/user/images').then(res=>{
       setDataList(res.data)
       //console.log(res.data);
     })
