@@ -27,31 +27,48 @@ function Post() {
   const [open, setOpen] = useState(false);
   useEffect(() => {
     setLoginUserDetails(store.getState().loginUserDetails.user);
-    if (loginUserDetails == null) {
-      //navigate('/profile');
-    }
+    
     if (!image) {
       return;
     }
-    setPreviewUrl(URL.createObjectURL(image));
+    const reader = new FileReader();
+    reader.readAsDataURL(image);
+    reader.onload=()=>{
+      setPreviewUrl(reader.result);
+    }
+    //setPreviewUrl(URL.createObjectURL(image));
 
-    return () => {
-      URL.revokeObjectURL(previewUrl);
-    };
-  }, [image,loginUserDetails,previewUrl]);
+    // return () => {
+    //   URL.revokeObjectURL(previewUrl);
+    //   console.log(previewUrl)
+    // };
+  },[image]);
   const handleRemoveImage = () => {
     setImage(null);
   };
   const handleSumbit = async (e) => {
+
+    if (loginUserDetails == null) {
+      navigate('/profile');
+    }
     try {
-      const formData = new FormData();
-      formData.append("image", image);
-      formData.append("title", title);
-      formData.append("description", description);
-      formData.append("rating", 0);
-      formData.append("israted", false);
-      formData.append("userName", "User Name");
-      formData.append("userId", "user ID");
+      const formData = {
+        image:previewUrl,
+        title:title,
+        description:description,
+        rating:0,
+        israted:false
+      }
+      
+      
+      
+      // new FormData();
+      // formData.append("image", previewUrl);
+      // formData.append("title", title);
+      // formData.append("description", description);
+      // formData.append("rating", 0);
+      // formData.append("israted", false);
+
 
       // const response =await axios.post("http://localhost:5000/images/upload",{
       //   title,description
@@ -67,12 +84,14 @@ function Post() {
         );
         
         //actual server
+        // "http://localhost:5000"
         // const response = await axios.post(
         //   process.env.REACT_APP_API_URL +
         //     `/${store.getState().loginUserDetails.user._id}/upload`,
         //   formData
         // );
         if (response.status === 200) {
+         
           setOpen(false);
           navigate("/");
         } else {
