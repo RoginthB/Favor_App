@@ -38,7 +38,7 @@ function Post() {
     return () => {
       URL.revokeObjectURL(previewUrl);
     };
-  }, [image]);
+  }, [image,loginUserDetails,previewUrl]);
   const handleRemoveImage = () => {
     setImage(null);
   };
@@ -148,7 +148,7 @@ function Post() {
                       borderRadius: "8px",
                     }}
                     src={previewUrl}
-                    alt={"preview Image"}
+                    alt={"preview"}
                   />
                   <span
                     onClick={handleRemoveImage}
