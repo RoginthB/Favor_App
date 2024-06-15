@@ -1,8 +1,9 @@
+import { configureStore } from "@reduxjs/toolkit";
+import appReducers from '../src/reducers/appReducers';
 
-function store() {
-  return (
-    <div>store</div>
-  )
-}
-
+const store = configureStore({
+  reducer:{
+    loginUserDetails :appReducers
+  }
+})
 export default store
