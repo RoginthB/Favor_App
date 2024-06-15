@@ -84,7 +84,7 @@ function Profile() {
                     fontSize:'40px'
                   }}
                 >
-                  {userDetails.name[0].toUpperCase()}
+                  {userDetails.name[0]}
                 </Avatar>
                 <Box sx={{ padding: "20px" }}>
                   <Typography component="p" variant="h5" noWrap={true}>
@@ -154,8 +154,9 @@ function Profile() {
                     <img
                     className={item.userUniqId}
                       id={item._id}
-                      src={`${item.imagePath}?w=164&h=164&fit=crop&auto=format`}
-                      srcSet={`${item.imagePath}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
+                      style={{width:"164px", height:"164px", objectFit:"cover"}}
+                      src={item.imagePath}
+                      srcSet={item.imagePath}
                       alt={item.title}
                       loading="lazy"
                     />
