@@ -84,7 +84,7 @@ function Profile() {
                     fontSize:'40px'
                   }}
                 >
-                  {userDetails.name[0]}
+                  {userDetails.name[0].toUpperCase()}
                 </Avatar>
                 <Box sx={{ padding: "20px" }}>
                   <Typography component="p" variant="h5" noWrap={true}>
