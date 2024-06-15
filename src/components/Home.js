@@ -40,7 +40,7 @@ function Home() {
       <Container maxWidth="md" sx={{ marginTop: '80px',marginBottom:'80px' }}>
         {dataList.map((data) => {
           return <Box sx={{margin:'20px'}}>
-            <Card sx={{ maxWidth: 345, margin: 'auto', backgroundColor: '#eff5f5', borderRadius: 3, boxShadow: '2px 2px 5px #d6e4e5' }} >
+            <Card id={data.userUniqId} sx={{ maxWidth: 345, margin: 'auto', backgroundColor: '#eff5f5', borderRadius: 3, boxShadow: '2px 2px 5px #d6e4e5' }} >
               <CardHeader
                 avatar={<Avatar sx={{ color: '#497174' ,backgroundColor:'#cfffac' }} >{data.userName[0]}</Avatar>}
                 action={
