@@ -16,6 +16,7 @@ import { useNavigate } from "react-router-dom";
 import CancelRoundedIcon from "@mui/icons-material/CancelRounded";
 import axios from "axios";
 import store from "../store";
+import { getNewData } from "../reducers/appReducers";
 function Post() {
   const [image, setImage] = useState(null);
   const [previewUrl, setPreviewUrl] = useState(null);
@@ -57,7 +58,10 @@ function Post() {
         title:title,
         description:description,
         rating:0,
-        israted:false
+        israted:false,
+        userName:loginUserDetails.name,
+        userId:loginUserDetails.userId,
+        userUniqId:loginUserDetails._id
       }
       
       
@@ -91,7 +95,7 @@ function Post() {
         //   formData
         // );
         if (response.status === 200) {
-         
+         store.dispatch(getNewData(response.data));
           setOpen(false);
           navigate("/");
         } else {
