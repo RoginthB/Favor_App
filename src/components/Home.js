@@ -20,7 +20,7 @@ function Home() {
 
   useEffect(()=>{
     getData();
-      setDataList(randomSort(dataList));
+      
     },[]);
   function randomSort(arr) {
     return arr
@@ -30,7 +30,8 @@ function Home() {
   }
   const getData=()=>{
     axios.get(process.env.REACT_APP_API_URL+'/user/images').then(res=>{
-      setDataList(res.data)
+      setDataList(randomSort(res.data));
+      //setDataList()
       //console.log(res.data);
     })
   }
