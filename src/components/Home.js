@@ -1,5 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { Box, Container, Stack, Typography } from "@mui/material";
+import {
+  Backdrop,
+  Box,
+  CircularProgress,
+  Container,
+  Rating,
+  Stack,
+  Typography,
+} from "@mui/material";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
 import CardMedia from "@mui/material/CardMedia";
@@ -7,23 +15,26 @@ import CardContent from "@mui/material/CardContent";
 import CardActions from "@mui/material/CardActions";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
-//import StarOutlineIcon from "@mui/icons-material/StarOutlineRounded";
-//import StarIcon from "@mui/icons-material/StarRounded";
+
 import store from "../store";
 import { useNavigate } from "react-router-dom";
 
 //import StarOutlineRoundedIcon from '@mui/icons-material/StarOutlineRounded';
 import axios from "axios";
+import { getNewData } from "../reducers/appReducers";
 
 function Home() {
-  //const [isFilled, setIsFilled] = useState(false);
+  // const [isFilled, setIsFilled] = useState(false);
+  const [open, setOpen] = useState(false);
   const [isFollowed, setFollowed] = useState(false);
   const [dataList, setDataList] = useState([]);
   const navigate = useNavigate();
   useEffect(() => {
+    setOpen(true)
     axios.get(process.env.REACT_APP_API_URL + "/user/images").then((res) => {
       setDataList(randomSort(res.data));
       //console.log(res.data);
+      setOpen(false)
     });
   }, [isFollowed]);
   function randomSort(arr) {
@@ -32,11 +43,23 @@ function Home() {
       .sort((a, b) => a.sort - b.sort)
       .map(({ val }) => val);
   }
- 
-
-  const handleClick = () => {
-    setIsFilled(!isFilled);
+  const checkFolloweOrNot = (id) => {
+    
+    if (Object.keys(store.getState().loginUserDetails.user).length === 0) {
+      return false;
+    } else {
+      const resulte = store
+        .getState()
+        .loginUserDetails.user.following.some((item) => item.userUniqId === id);
+        return resulte;
+        
+    }
   };
+
+  // const handleRating= (e,id) => {
+  //   const updatedDatalist = dataList.map(data => data._id === id ? {...data , rating: e.})
+
+  // };
   const handleFollow = (id) => {
     const loginUser = store.getState().loginUserDetails.user;
 
@@ -54,7 +77,9 @@ function Home() {
           followerDetails
         )
         .then((res) => {
-          setFollowed(!isFollowed);
+          store.dispatch(getNewData(res.data));
+          setFollowed(!isFollowed)
+          
         });
     } else {
       navigate("/profile");
@@ -89,11 +114,7 @@ function Home() {
                     <Button
                       onClick={() => handleFollow(data.userUniqId)}
                       variant={
-                        store
-                          .getState()
-                          .loginUserDetails.user.following.some(
-                            (item) => item.userUniqId === data.userUniqId
-                          )
+                        checkFolloweOrNot(data.userUniqId)
                           ? "outlined"
                           : "contained"
                       }
@@ -104,11 +125,7 @@ function Home() {
                         marginRight: "7px",
                       }}
                     >
-                      {store
-                        .getState()
-                        .loginUserDetails.user.following.some(
-                          (item) => item.userUniqId === data.userUniqId
-                        )
+                      {checkFolloweOrNot(data.userUniqId)
                         ? "following"
                         : "follow"}
                     </Button>
@@ -133,25 +150,33 @@ function Home() {
                       {data.title}
                     </Typography>
                     <Stack direction="row" spacing={1} alignItems="center">
-
-                      <Rating name="no-value" value={data.rating} precision={0.5}
-                       onChange={(e, newValue)=>{
-                        setDataList(dataList.map(d => d._id === data._id ? {...d , rating: newValue} : d));
-                       }}
-                       />
-                      // <IconButton
-                      //   onClick={handleClick}
-                      //   style={{ color: data.israted ? "gold" : "inherit" }}
-                      // >
-                      //   {data.israted ? (
-                      //     <StarIcon fontSize="large" />
-                      //   ) : (
-                      //     <StarOutlineIcon fontSize="large" />
-                      //   )}
-                      // </IconButton>
-                      // <Typography component="p" variant="p" noWrap={true}>
-                      //   {data.rating}
-                      // </Typography>
+                      {/* <IconButton
+                        onClick={handleClick}
+                        style={{ color: data.israted ? "gold" : "inherit" }}
+                      >
+                        {data.israted ? (
+                          <StarIcon fontSize="large" />
+                        ) : (
+                          <StarOutlineIcon fontSize="large" />
+                        )}
+                      </IconButton> */}
+                      <Rating
+                        name="no-value"
+                        value={data.rating}
+                        precision={0.5}
+                        onChange={(e, newValue) => {
+                          setDataList(
+                            dataList.map((d) =>
+                              d._id === data._id
+                                ? { ...d, rating: newValue }
+                                : d
+                            )
+                          );
+                        }}
+                      />
+                      {/* <Typography component="p" variant="p" noWrap={true}>
+                        {data.rating}
+                      </Typography> */}
                     </Stack>
                   </Stack>
                 </CardActions>
@@ -164,6 +189,13 @@ function Home() {
             </Box>
           );
         })}
+        <Backdrop
+        sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={open}
+        // onClick={handleClose}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
       </Container>
     </>
   );
