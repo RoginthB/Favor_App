@@ -80,7 +80,7 @@ function Post() {
       if (title !== "" && description !=="") {
         e.preventDefault();
         setOpen(true);
-        console.log(formData)
+        
         const response = await axios.post(
           process.env.REACT_APP_API_URL +
             `/user/${store.getState().loginUserDetails.user._id}/upload`,
