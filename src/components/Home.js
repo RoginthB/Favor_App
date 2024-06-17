@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Box, Container, IconButton, Stack, Typography } from "@mui/material";
+import { Box, Container, Stack, Typography } from "@mui/material";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
 import CardMedia from "@mui/material/CardMedia";
@@ -7,8 +7,8 @@ import CardContent from "@mui/material/CardContent";
 import CardActions from "@mui/material/CardActions";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
-import StarOutlineIcon from "@mui/icons-material/StarOutlineRounded";
-import StarIcon from "@mui/icons-material/StarRounded";
+//import StarOutlineIcon from "@mui/icons-material/StarOutlineRounded";
+//import StarIcon from "@mui/icons-material/StarRounded";
 import store from "../store";
 import { useNavigate } from "react-router-dom";
 
@@ -16,7 +16,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 function Home() {
-  const [isFilled, setIsFilled] = useState(false);
+  //const [isFilled, setIsFilled] = useState(false);
   const [isFollowed, setFollowed] = useState(false);
   const [dataList, setDataList] = useState([]);
   const navigate = useNavigate();
@@ -133,19 +133,25 @@ function Home() {
                       {data.title}
                     </Typography>
                     <Stack direction="row" spacing={1} alignItems="center">
-                      <IconButton
-                        onClick={handleClick}
-                        style={{ color: data.israted ? "gold" : "inherit" }}
-                      >
-                        {data.israted ? (
-                          <StarIcon fontSize="large" />
-                        ) : (
-                          <StarOutlineIcon fontSize="large" />
-                        )}
-                      </IconButton>
-                      <Typography component="p" variant="p" noWrap={true}>
-                        {data.rating}
-                      </Typography>
+
+                      <Rating name="no-value" value={data.rating} precision={0.5}
+                       onChange={(e, newValue)=>{
+                        setDataList(dataList.map(d => d._id === data._id ? {...d , rating: newValue} : d));
+                       }}
+                       />
+                      // <IconButton
+                      //   onClick={handleClick}
+                      //   style={{ color: data.israted ? "gold" : "inherit" }}
+                      // >
+                      //   {data.israted ? (
+                      //     <StarIcon fontSize="large" />
+                      //   ) : (
+                      //     <StarOutlineIcon fontSize="large" />
+                      //   )}
+                      // </IconButton>
+                      // <Typography component="p" variant="p" noWrap={true}>
+                      //   {data.rating}
+                      // </Typography>
                     </Stack>
                   </Stack>
                 </CardActions>
